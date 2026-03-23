@@ -159,5 +159,31 @@ magneticTokens.forEach(btn => {
 });
 
 window.addEventListener('load', () => {
-  initAnimations();
+  // Premium Percentage Loader Logic
+  let n = 0;
+  const ldNum = document.getElementById('ldNum');
+  const loader = document.getElementById('loader');
+  
+  const ldTimer = setInterval(() => {
+    n += Math.ceil(Math.random() * 10);
+    if (n >= 100) { 
+      n = 100; 
+      clearInterval(ldTimer); 
+    }
+    ldNum.textContent = String(n).padStart(3, '0');
+  }, 35);
+
+  // Sync loader exit with GSAP hero reveal
+  setTimeout(() => {
+    gsap.to(loader, {
+      yPercent: -100,
+      duration: 1.2,
+      ease: "expo.inOut",
+      onComplete: () => {
+        loader.style.display = 'none';
+        // Start the hero animations exactly as the loader finishes rising
+        initAnimations();
+      }
+    });
+  }, 2200); // Trigger after the initial CSS animation reveals text
 });
