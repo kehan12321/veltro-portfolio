@@ -20,9 +20,30 @@ function raf(time) {
 requestAnimationFrame(raf);
 
 // Integrate Lenis with GSAP ScrollTrigger
-lenis.on('scroll', ScrollTrigger.update);
+const navEl = document.querySelector('.nav');
+lenis.on('scroll', (e) => {
+  ScrollTrigger.update();
+  if (navEl) {
+    if (window.scrollY > 60) {
+      navEl.classList.add('scrolled');
+    } else {
+      navEl.classList.remove('scrolled');
+    }
+  }
+});
 gsap.ticker.add((time) => { lenis.raf(time * 1000); });
 gsap.ticker.lagSmoothing(0, 0);
+
+// Lenis Anchor Link Handling
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = this.getAttribute('href');
+    if(target.length > 1) {
+      lenis.scrollTo(target, { duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+    }
+  });
+});
 
 // Custom Cursor logic
 const cursorDot = document.querySelector('.cursor-dot');
