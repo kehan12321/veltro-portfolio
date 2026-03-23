@@ -165,10 +165,11 @@ const initAnimations = () => {
   );
 
   // Metrics Animation (animated bars)
-  gsap.utils.toArray('.metric-fill').forEach(metric => {
+  gsap.utils.toArray('.metric-fill').forEach((metric, i) => {
+    const widths = ['98%', '180%', '100%'];
     gsap.fromTo(metric,
       { width: '0%' },
-      { scrollTrigger: { trigger: metric, start: "top 80%" }, width: getComputedStyle(metric).getPropertyValue('--width') || '100%', duration: 2, ease: "power2.out" }
+      { scrollTrigger: { trigger: metric.parentElement, start: "top 80%" }, width: widths[i] || '100%', duration: 2, ease: "power2.out" }
     );
   });
 
