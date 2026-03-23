@@ -74,14 +74,24 @@ document.addEventListener("mouseenter", () => {
 const initAnimations = () => {
   const tl = gsap.timeline();
   
-  tl.fromTo(".hero-title .word", 
-    { y: "110%", rotate: 8, opacity: 0 },
-    { y: "0%", rotate: 0, opacity: 1, duration: 1.2, stagger: 0.1, ease: "power4.out" }
+  tl.fromTo(".hero-badge", 
+    { opacity: 0, y: 20 },
+    { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
   )
-  .fromTo(".hero-desc, .hero-actions, .nav", 
+  .fromTo(".hero-title .word", 
+    { y: "110%", rotate: 8, opacity: 0 },
+    { y: "0%", rotate: 0, opacity: 1, duration: 1.2, stagger: 0.1, ease: "power4.out" },
+    0.2
+  )
+  .fromTo(".hero-subtitle", 
+    { opacity: 0, y: 20 },
+    { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
+    "-=0.8"
+  )
+  .fromTo(".hero-desc, .hero-actions, .hero-stats, .nav", 
     { opacity: 0, y: 30 },
     { opacity: 1, y: 0, duration: 1, stagger: 0.1, ease: "power3.out" },
-    "-=0.8"
+    "-=0.6"
   );
 
   // Section Titles Reveal
@@ -92,10 +102,10 @@ const initAnimations = () => {
     );
   });
 
-  // Services Stagger
+  // Services Card Animations
   gsap.fromTo('.service-item',
-    { opacity: 0, x: -30 },
-    { scrollTrigger: { trigger: '.services-list', start: "top 80%" }, opacity: 1, x: 0, duration: 1, stagger: 0.15, ease: "power3.out" }
+    { opacity: 0, y: 40 },
+    { scrollTrigger: { trigger: '.services-list', start: "top 75%" }, opacity: 1, y: 0, duration: 1.2, stagger: 0.2, ease: "power3.out" }
   );
 
   // Work Cards Reveal & Parallax
@@ -162,20 +172,10 @@ magneticTokens.forEach(btn => {
     const rect = btn.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
-    gsap.to(btn, { x: x * 0.4, y: y * 0.4, duration: 0.6, ease: "power3.out" });
-    
-    // Also shift text slightly if it exists
-    const text = btn.querySelector('span') || btn.querySelector('svg');
-    if(text) {
-      gsap.to(text, { x: x * 0.2, y: y * 0.2, duration: 0.6, ease: "power3.out" });
-    }
+    gsap.to(btn, { x: x * 0.35, y: y * 0.35, duration: 0.5, ease: "power2.out" });
   });
   btn.addEventListener('mouseleave', () => {
-    gsap.to(btn, { x: 0, y: 0, duration: 1, ease: "elastic.out(1, 0.3)" });
-    const text = btn.querySelector('span') || btn.querySelector('svg');
-    if(text) {
-      gsap.to(text, { x: 0, y: 0, duration: 1, ease: "elastic.out(1, 0.3)" });
-    }
+    gsap.to(btn, { x: 0, y: 0, duration: 0.8, ease: "elastic.out(1, 0.4)" });
   });
 });
 
