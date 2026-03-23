@@ -6,7 +6,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 // Initialize Smooth Scrolling (Lenis) with ultra premium settings
 const lenis = new Lenis({
-  duration: 1.5,
+  duration: 0.8,
   easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
   smooth: true,
   mouseMultiplier: 0.8,
@@ -51,24 +51,16 @@ document.addEventListener("mouseenter", () => {
 
 // Animations Pipeline
 const initAnimations = () => {
-  // Intro Loader
   const tl = gsap.timeline();
   
-  tl.to(".loader-progress", {
-    width: "100%", duration: 1.5, ease: "power3.inOut"
-  })
-  .to(".loader", {
-    yPercent: -100, duration: 1.2, ease: "expo.inOut"
-  })
-  .fromTo(".hero-title .word", 
+  tl.fromTo(".hero-title .word", 
     { y: "110%", rotate: 8, opacity: 0 },
-    { y: "0%", rotate: 0, opacity: 1, duration: 1.4, stagger: 0.1, ease: "power4.out" },
-    "-=0.6"
+    { y: "0%", rotate: 0, opacity: 1, duration: 1.2, stagger: 0.1, ease: "power4.out" }
   )
   .fromTo(".hero-desc, .hero-actions, .nav", 
     { opacity: 0, y: 30 },
-    { opacity: 1, y: 0, duration: 1.2, stagger: 0.1, ease: "power3.out" },
-    "-=1"
+    { opacity: 1, y: 0, duration: 1, stagger: 0.1, ease: "power3.out" },
+    "-=0.8"
   );
 
   // Section Titles Reveal
@@ -167,5 +159,5 @@ magneticTokens.forEach(btn => {
 });
 
 window.addEventListener('load', () => {
-  setTimeout(initAnimations, 300);
+  initAnimations();
 });
