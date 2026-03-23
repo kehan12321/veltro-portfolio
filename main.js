@@ -158,6 +158,26 @@ const initAnimations = () => {
     { scrollTrigger: { trigger: '.about-stats', start: "top 90%" }, opacity: 1, y: 0, duration: 1, stagger: 0.2, ease: "power3.out" }
   );
 
+  // Testimonials Animations
+  gsap.fromTo('.testimonial-card',
+    { opacity: 0, y: 40 },
+    { scrollTrigger: { trigger: '.testimonials-grid', start: "top 75%" }, opacity: 1, y: 0, duration: 1, stagger: 0.2, ease: "power3.out" }
+  );
+
+  // Metrics Animation (animated bars)
+  gsap.utils.toArray('.metric-fill').forEach(metric => {
+    gsap.fromTo(metric,
+      { width: '0%' },
+      { scrollTrigger: { trigger: metric, start: "top 80%" }, width: getComputedStyle(metric).getPropertyValue('--width') || '100%', duration: 2, ease: "power2.out" }
+    );
+  });
+
+  // FAQ Animations
+  gsap.fromTo('.faq-item',
+    { opacity: 0, x: -30 },
+    { scrollTrigger: { trigger: '.faq-list', start: "top 80%" }, opacity: 1, x: 0, duration: 0.8, stagger: 0.1, ease: "power3.out" }
+  );
+
   // Footer Reveal
   gsap.fromTo('.footer-container',
     { opacity: 0, y: 50 },
@@ -183,6 +203,21 @@ magneticTokens.forEach(btn => {
 let n = 0;
 const ldNum = document.getElementById('ldNum');
 const loader = document.getElementById('loader');
+
+// FAQ Toggle Functionality
+document.querySelectorAll('.faq-header').forEach(header => {
+  header.addEventListener('click', function() {
+    const faqItem = this.parentElement;
+    faqItem.classList.toggle('active');
+    
+    // Close other open items
+    document.querySelectorAll('.faq-item.active').forEach(item => {
+      if (item !== faqItem) {
+        item.classList.remove('active');
+      }
+    });
+  });
+});
 
 if (ldNum && loader) {
   const ldTimer = setInterval(() => {
