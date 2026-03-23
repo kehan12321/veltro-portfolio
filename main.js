@@ -44,11 +44,7 @@ if (cursorDot && cursorOutline) {
 const initAnimations = () => {
   const tl = gsap.timeline();
   
-  tl.fromTo(".hero-badge", 
-    { opacity: 0, y: 20 },
-    { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
-  )
-  .fromTo(".hero-title .word", 
+  tl.fromTo(".hero-title .word", 
     { y: "110%", rotate: 8, opacity: 0 },
     { y: "0%", rotate: 0, opacity: 1, duration: 1.2, stagger: 0.1, ease: "power4.out" },
     0.2
@@ -58,7 +54,7 @@ const initAnimations = () => {
     { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
     "-=0.8"
   )
-  .fromTo(".hero-desc, .hero-actions, .hero-stats, .nav", 
+  .fromTo(".hero-desc, .hero-stats, .nav", 
     { opacity: 0, y: 30 },
     { opacity: 1, y: 0, duration: 1, stagger: 0.1, ease: "power3.out" },
     "-=0.6"
