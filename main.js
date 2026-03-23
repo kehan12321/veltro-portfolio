@@ -1,43 +1,41 @@
-// Register GSAP ScrollTrigger plugin (loaded from CDN)
+// Register GSAP ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
-// Enable smooth scrolling with CSS
-document.documentElement.style.scrollBehavior = 'smooth';
+// 1. REMOVED CSS smooth scroll to prevent ScrollTrigger conflicts. 
+// Use Lenis.js if you want global smooth scrolling.
 
-// Nav scroll effect
+// 2. OPTIMIZED Nav scroll effect using ScrollTrigger instead of raw event listener
 const navEl = document.querySelector('.nav');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 60) {
-    navEl.classList.add('scrolled');
-  } else {
-    navEl.classList.remove('scrolled');
-  }
-});
+if (navEl) {
+  ScrollTrigger.create({
+    start: "top -60",
+    toggleClass: {targets: navEl, className: "scrolled"}
+  });
+}
 
-// Custom Cursor logic
+// 3. ADDED null checks for Custom Cursor
 const cursorDot = document.querySelector('.cursor-dot');
 const cursorOutline = document.querySelector('.cursor-outline');
 
-// Keep cursor updated (smoothly follow)
-window.addEventListener('mousemove', (e) => {
-  gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.1 });
-  gsap.to(cursorOutline, { x: e.clientX, y: e.clientY, duration: 0.6, ease: "power2.out" });
-});
+if (cursorDot && cursorOutline) {
+  window.addEventListener('mousemove', (e) => {
+    gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.1 });
+    gsap.to(cursorOutline, { x: e.clientX, y: e.clientY, duration: 0.6, ease: "power2.out" });
+  });
 
-// Cursor hover states
-const hoverTargets = document.querySelectorAll('[data-cursor="hover"]');
-hoverTargets.forEach((target) => {
-  target.addEventListener('mouseenter', () => cursorOutline.classList.add('cursor-hover'));
-  target.addEventListener('mouseleave', () => cursorOutline.classList.remove('cursor-hover'));
-});
+  const hoverTargets = document.querySelectorAll('[data-cursor="hover"]');
+  hoverTargets.forEach((target) => {
+    target.addEventListener('mouseenter', () => cursorOutline.classList.add('cursor-hover'));
+    target.addEventListener('mouseleave', () => cursorOutline.classList.remove('cursor-hover'));
+  });
 
-// Hide cursor when leaving window
-document.addEventListener("mouseleave", () => {
-  gsap.to([cursorDot, cursorOutline], { opacity: 0, duration: 0.3 });
-});
-document.addEventListener("mouseenter", () => {
-  gsap.to([cursorDot, cursorOutline], { opacity: 1, duration: 0.3 });
-});
+  document.addEventListener("mouseleave", () => {
+    gsap.to([cursorDot, cursorOutline], { opacity: 0, duration: 0.3 });
+  });
+  document.addEventListener("mouseenter", () => {
+    gsap.to([cursorDot, cursorOutline], { opacity: 1, duration: 0.3 });
+  });
+}
 
 // Animations Pipeline
 const initAnimations = () => {
@@ -63,7 +61,6 @@ const initAnimations = () => {
     "-=0.6"
   );
 
-  // Section Titles Reveal
   gsap.utils.toArray('.section-title').forEach(title => {
     gsap.fromTo(title, 
       { opacity: 0, y: 60 },
@@ -71,40 +68,37 @@ const initAnimations = () => {
     );
   });
 
-  // Services Card Animations
   gsap.fromTo('.service-item',
     { opacity: 0, y: 40 },
     { scrollTrigger: { trigger: '.services-list', start: "top 75%" }, opacity: 1, y: 0, duration: 1.2, stagger: 0.2, ease: "power3.out" }
   );
 
-  // Work Cards Reveal & Parallax
   gsap.utils.toArray('.work-card').forEach(card => {
     gsap.fromTo(card,
       { opacity: 0, y: 80 },
       { scrollTrigger: { trigger: card, start: "top 85%" }, opacity: 1, y: 0, duration: 1.2, ease: "power4.out" }
     );
     
-    // Image Parallax Effect
     const img = card.querySelector('.work-img');
-    gsap.to(img, {
-      yPercent: 15,
-      ease: "none",
-      scrollTrigger: {
-        trigger: card,
-        start: "top bottom", 
-        end: "bottom top",
-        scrub: true
-      }
-    });
+    if (img) {
+      gsap.to(img, {
+        yPercent: 15,
+        ease: "none",
+        scrollTrigger: {
+          trigger: card,
+          start: "top bottom", 
+          end: "bottom top",
+          scrub: true
+        }
+      });
+    }
   });
 
-  // About Image & Details Reveal
   gsap.fromTo('.about-img-wrapper',
     { scale: 0.9, opacity: 0 },
     { scrollTrigger: { trigger: '.about-img-wrapper', start: "top 80%" }, scale: 1, opacity: 1, duration: 1.6, ease: "power4.out" }
   );
   
-  // Parallax the image inside the wrapper
   gsap.to('.about-img', {
     yPercent: 15,
     ease: "none",
@@ -121,34 +115,30 @@ const initAnimations = () => {
     { scrollTrigger: { trigger: '.about-text', start: "top 85%" }, opacity: 1, y: 0, duration: 1.2, ease: "power3.out" }
   );
 
-  // Stats Stagger
   gsap.fromTo('.stat',
     { opacity: 0, y: 30 },
     { scrollTrigger: { trigger: '.about-stats', start: "top 90%" }, opacity: 1, y: 0, duration: 1, stagger: 0.2, ease: "power3.out" }
   );
 
-  // Testimonials Animations
   gsap.fromTo('.testimonial-card',
     { opacity: 0, y: 40 },
     { scrollTrigger: { trigger: '.testimonials-grid', start: "top 75%" }, opacity: 1, y: 0, duration: 1, stagger: 0.2, ease: "power3.out" }
   );
 
-  // Metrics Animation (animated bars)
+  // 4. FIXED the 180% width issue (changed to 80%)
   gsap.utils.toArray('.metric-fill').forEach((metric, i) => {
-    const widths = ['98%', '180%', '100%'];
+    const widths = ['98%', '80%', '100%']; 
     gsap.fromTo(metric,
       { width: '0%' },
       { scrollTrigger: { trigger: metric.parentElement, start: "top 80%" }, width: widths[i] || '100%', duration: 2, ease: "power2.out" }
     );
   });
 
-  // FAQ Animations
   gsap.fromTo('.faq-item',
     { opacity: 0, x: -30 },
     { scrollTrigger: { trigger: '.faq-list', start: "top 80%" }, opacity: 1, x: 0, duration: 0.8, stagger: 0.1, ease: "power3.out" }
   );
 
-  // Footer Reveal
   gsap.fromTo('.footer-container',
     { opacity: 0, y: 50 },
     { scrollTrigger: { trigger: '.footer', start: "top 85%" }, opacity: 1, y: 0, duration: 1.2, ease: "power3.out" }
@@ -169,18 +159,12 @@ magneticTokens.forEach(btn => {
   });
 });
 
-// Execute loader directly without waiting for blocking assets
-let n = 0;
-const ldNum = document.getElementById('ldNum');
-const loader = document.getElementById('loader');
-
 // FAQ Toggle Functionality
 document.querySelectorAll('.faq-header').forEach(header => {
   header.addEventListener('click', function() {
     const faqItem = this.parentElement;
     faqItem.classList.toggle('active');
     
-    // Close other open items
     document.querySelectorAll('.faq-item.active').forEach(item => {
       if (item !== faqItem) {
         item.classList.remove('active');
@@ -189,27 +173,33 @@ document.querySelectorAll('.faq-header').forEach(header => {
   });
 });
 
+// 5. FIXED Loader sync issue
+let n = 0;
+const ldNum = document.getElementById('ldNum');
+const loader = document.getElementById('loader');
+
 if (ldNum && loader) {
   const ldTimer = setInterval(() => {
     n += Math.ceil(Math.random() * 10);
     if (n >= 100) { 
       n = 100; 
+      ldNum.textContent = String(n).padStart(3, '0');
       clearInterval(ldTimer); 
+      
+      // Trigger loader exit ONLY when n hits 100
+      gsap.to(loader, {
+        yPercent: -100,
+        duration: 1.2,
+        ease: "expo.inOut",
+        onComplete: () => {
+          loader.style.display = 'none';
+          initAnimations();
+        }
+      });
+    } else {
+      ldNum.textContent = String(n).padStart(3, '0');
     }
-    ldNum.textContent = String(n).padStart(3, '0');
   }, 35);
-
-  setTimeout(() => {
-    gsap.to(loader, {
-      yPercent: -100,
-      duration: 1.2,
-      ease: "expo.inOut",
-      onComplete: () => {
-        loader.style.display = 'none';
-        initAnimations();
-      }
-    });
-  }, 2200);
 } else {
   setTimeout(initAnimations, 300);
 }

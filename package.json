@@ -1,19 +1,18 @@
 {
-  "name": "anti-gravity",
+  "name": "veltro-portfolio",
+  "private": true,
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Veltro — Premium Web Design Studio Portfolio",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "vite build"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "gsap": "^3.14.2",
-    "lenis": "^1.3.20",
-    "vite": "^8.0.1"
+    "lenis": "^1.3.20"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
   }
 }
