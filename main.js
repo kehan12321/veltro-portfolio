@@ -1,4 +1,7 @@
-// Register GSAP ScrollTrigger plugin (loaded from CDN)
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+// Register GSAP ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
 // Enable smooth scrolling with CSS
