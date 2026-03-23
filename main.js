@@ -60,7 +60,7 @@ const initAnimations = () => {
     { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
     "-=0.8"
   )
-  .fromTo(".hero-desc, .hero-actions, .hero-stats, .nav", 
+  .fromTo(".hero-desc, .hero-stats, .nav", 
     { opacity: 0, y: 30 },
     { opacity: 1, y: 0, duration: 1, stagger: 0.1, ease: "power3.out" },
     "-=0.6"
