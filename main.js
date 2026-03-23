@@ -158,12 +158,12 @@ magneticTokens.forEach(btn => {
   });
 });
 
-window.addEventListener('load', () => {
-  // Premium Percentage Loader Logic
-  let n = 0;
-  const ldNum = document.getElementById('ldNum');
-  const loader = document.getElementById('loader');
-  
+// Execute loader directly without waiting for blocking assets
+let n = 0;
+const ldNum = document.getElementById('ldNum');
+const loader = document.getElementById('loader');
+
+if (ldNum && loader) {
   const ldTimer = setInterval(() => {
     n += Math.ceil(Math.random() * 10);
     if (n >= 100) { 
@@ -173,7 +173,6 @@ window.addEventListener('load', () => {
     ldNum.textContent = String(n).padStart(3, '0');
   }, 35);
 
-  // Sync loader exit with GSAP hero reveal
   setTimeout(() => {
     gsap.to(loader, {
       yPercent: -100,
@@ -181,9 +180,10 @@ window.addEventListener('load', () => {
       ease: "expo.inOut",
       onComplete: () => {
         loader.style.display = 'none';
-        // Start the hero animations exactly as the loader finishes rising
         initAnimations();
       }
     });
-  }, 2200); // Trigger after the initial CSS animation reveals text
-});
+  }, 2200);
+} else {
+  setTimeout(initAnimations, 300);
+}
