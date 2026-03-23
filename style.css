@@ -310,27 +310,27 @@ section { padding: 160px 0; }
 }
 
 /* ═══════════════════════════════════════════
-   WORK / PROJECTS
+   WORK / PROJECTS (Sticky Stacking Cards)
    ═══════════════════════════════════════════ */
 .work { background: var(--bg); }
-.work-grid {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px;
-}
+.work-stack { display: flex; flex-direction: column; gap: 0; }
 .work-card {
-  display: block; position: relative; border-radius: var(--radius);
-  overflow: hidden; background: var(--bg-card);
-  border: 1px solid var(--border);
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  display: block; position: sticky; top: 100px;
+  border-radius: var(--radius); overflow: hidden;
+  background: var(--bg-card); border: 1px solid var(--border);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s;
+  margin-bottom: 40px; transform-origin: center top;
+  will-change: transform;
 }
-.work-card:hover { border-color: rgba(212, 175, 55, 0.3); transform: translateY(-6px); box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4); }
-.work-card-large { grid-column: span 2; }
+.work-card:nth-child(2) { top: 120px; }
+.work-card:nth-child(3) { top: 140px; }
+.work-card:nth-child(4) { top: 160px; }
+.work-card:hover { box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5); }
 .work-img-wrapper {
-  width: 100%; aspect-ratio: 16/10; overflow: hidden;
-  position: relative;
+  width: 100%; aspect-ratio: 16/9; overflow: hidden; position: relative;
 }
-.work-card-large .work-img-wrapper { aspect-ratio: 21/9; }
 .work-img {
-  width: 100%; height: 110%; background-position: center; background-size: cover;
+  width: 100%; height: 115%; background-position: center; background-size: cover;
   transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s;
   filter: grayscale(60%) brightness(0.85);
 }
@@ -338,10 +338,10 @@ section { padding: 160px 0; }
 .img-2 { background-image: url('https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=1200&auto=format&fit=crop'); }
 .img-3 { background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop'); }
 .img-4 { background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1200&auto=format&fit=crop'); }
-.work-card:hover .work-img { transform: scale(1.08); filter: grayscale(0%) brightness(1); }
+.work-card:hover .work-img { transform: scale(1.06); filter: grayscale(0%) brightness(1); }
 .work-badge {
   position: absolute; top: 20px; left: 20px;
-  padding: 8px 16px; border-radius: 100px;
+  padding: 8px 18px; border-radius: 100px;
   background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(10px);
   font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em;
   color: var(--accent); border: 1px solid rgba(212, 175, 55, 0.2);
@@ -511,9 +511,7 @@ section { padding: 160px 0; }
   .hero-photo-wrapper { width: clamp(200px, 50vw, 280px); margin: 0 auto; }
 
   .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-  .work-grid { grid-template-columns: 1fr; }
-  .work-card-large { grid-column: span 1; }
-  .work-card-large .work-img-wrapper { aspect-ratio: 16/10; }
+  .work-card { position: relative; top: auto !important; }
   .about-layout { grid-template-columns: 1fr; gap: 60px; }
   .testimonials-grid { grid-template-columns: 1fr; }
   .footer-top { grid-template-columns: 1fr; }
