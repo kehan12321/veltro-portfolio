@@ -91,26 +91,26 @@ const initAnimations = () => {
 
   if (heroTextTop && heroTextBottom) {
     gsap.to(heroTextTop, {
-      x: -150,
-      opacity: 0.3,
-      ease: "none",
+      xPercent: -80,
+      opacity: 0,
+      ease: "power1.inOut",
       scrollTrigger: {
         trigger: ".hero",
         start: "top top",
         end: "bottom top",
-        scrub: 1
+        scrub: 0.8
       }
     });
 
     gsap.to(".hero-heading-right", {
-      x: 150,
-      opacity: 0.3,
-      ease: "none",
+      xPercent: 80,
+      opacity: 0,
+      ease: "power1.inOut",
       scrollTrigger: {
         trigger: ".hero",
         start: "top top",
         end: "bottom top",
-        scrub: 1
+        scrub: 0.8
       }
     });
   }
