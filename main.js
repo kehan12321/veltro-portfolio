@@ -13,7 +13,7 @@ if (cursorDot && cursorOutline) {
     gsap.to(cursorOutline, { x: e.clientX, y: e.clientY, duration: 0.5, ease: "power2.out" });
   });
 
-  document.querySelectorAll('[data-cursor="hover"]').forEach((el) => {
+  document.querySelectorAll('[data-cursor="view"], [data-cursor="hover"]').forEach((el) => {
     el.addEventListener('mouseenter', () => cursorOutline.classList.add('cursor-hover'));
     el.addEventListener('mouseleave', () => cursorOutline.classList.remove('cursor-hover'));
   });
