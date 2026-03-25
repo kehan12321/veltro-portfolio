@@ -117,9 +117,8 @@ const initAnimations = () => {
 
   // ─── ABOUT 3D ANTI-GRAVITY FLOATING CARD ───
   const aboutCard = document.querySelector('.floating-3d-card');
-  const aboutImgBack = document.querySelector('.about-img-back');
 
-  if (aboutCard && aboutImgBack) {
+  if (aboutCard) {
     const aboutTl = gsap.timeline({
       scrollTrigger: {
         trigger: "#about",
@@ -131,12 +130,11 @@ const initAnimations = () => {
       }
     });
 
-    // Tilt backward, turn slightly, float upward, and crossfade halfway
+    // Tilt backward, turn slightly, and float upward
     aboutTl.fromTo(aboutCard, 
       { rotationX: 20, rotationY: -15, y: 150 },
       { rotationX: -10, rotationY: 10, y: -50, ease: "none", duration: 1 }
-    )
-    .to(aboutImgBack, { opacity: 1, duration: 0.2 }, 0.4); 
+    );
   }
 
   // Hero photo parallax (moves slower on scroll)
