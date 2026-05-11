@@ -1,7 +1,17 @@
+import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
+
+// ─── Lenis Smooth Scroll ───
+const lenis = new Lenis({
+  duration: 1.2,
+  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+});
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((time) => lenis.raf(time * 1000));
+gsap.ticker.lagSmoothing(0);
 
 // ─── Custom Cursor ───
 const cursorDot = document.querySelector('.cursor-dot');
@@ -13,9 +23,14 @@ if (cursorDot && cursorOutline) {
     gsap.to(cursorOutline, { x: e.clientX, y: e.clientY, duration: 0.5, ease: "power2.out" });
   });
 
-  document.querySelectorAll('[data-cursor="view"], [data-cursor="hover"]').forEach((el) => {
+  // FIX: hover and view elements get different cursor classes
+  document.querySelectorAll('[data-cursor="hover"]').forEach((el) => {
     el.addEventListener('mouseenter', () => cursorOutline.classList.add('cursor-hover'));
     el.addEventListener('mouseleave', () => cursorOutline.classList.remove('cursor-hover'));
+  });
+  document.querySelectorAll('[data-cursor="view"]').forEach((el) => {
+    el.addEventListener('mouseenter', () => cursorOutline.classList.add('cursor-view'));
+    el.addEventListener('mouseleave', () => cursorOutline.classList.remove('cursor-view'));
   });
 
   document.addEventListener("mouseleave", () => gsap.to([cursorDot, cursorOutline], { opacity: 0, duration: 0.3 }));
@@ -36,47 +51,41 @@ if (navEl) {
 // ANIMATIONS PIPELINE (called after loader)
 // ═══════════════════════════════════════════
 const initAnimations = () => {
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 
   // ─── HERO ENTRANCE ───
   const heroTl = gsap.timeline();
 
-  // Photo scales up from 0.8
   heroTl.fromTo(".hero-photo-wrapper",
     { scale: 0.8, opacity: 0 },
     { scale: 1, opacity: 1, duration: 1.6, ease: "power4.out" },
     0
   )
-  // Name label fades in
   .fromTo(".hero-name",
     { opacity: 0, y: 20 },
     { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
     0.1
   )
-  // Title words clip-reveal upward (masked by overflow:hidden on .hero-line)
   .fromTo(".hero-word",
     { y: "110%", rotate: 3 },
     { y: "0%", rotate: 0, duration: 1.4, stagger: 0.06, ease: "power4.out" },
     0.15
   )
-  // "Hi" badge pops in
   .fromTo(".hero-badge",
     { scale: 0, opacity: 0 },
     { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(2.5)" },
     0.8
   )
-  // Tagline fades up
   .fromTo(".hero-tagline",
     { opacity: 0, y: 20 },
     { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
     0.6
   )
-  // Scroll indicator
   .fromTo(".hero-scroll-indicator",
     { opacity: 0 },
     { opacity: 1, duration: 1 },
     1.0
   )
-  // Nav slides down
   .fromTo(".nav",
     { y: -60, opacity: 0 },
     { y: 0, opacity: 1, duration: 1, ease: "power3.out" },
@@ -101,12 +110,12 @@ const initAnimations = () => {
 
     scrollTl.to(heroTextTop, { xPercent: -80, opacity: 0, ease: "power1.inOut" }, 0)
             .to(".hero-heading-right", { xPercent: 80, opacity: 0, ease: "power1.inOut" }, 0)
-            .to(heroPhoto, { 
-                scale: 0.85, 
-                rotationY: 25, 
-                rotationX: 15, 
-                y: window.innerHeight * 0.35, 
-                ease: "power1.inOut" 
+            .to(heroPhoto, {
+                scale: 0.85,
+                rotationY: 25,
+                rotationX: 15,
+                y: window.innerHeight * 0.35,
+                ease: "power1.inOut"
             }, 0)
             .to(".hero-badge", {
                 scale: 0,
@@ -115,42 +124,25 @@ const initAnimations = () => {
             }, 0);
   }
 
-  // ─── ABOUT 3D ANTI-GRAVITY FLOATING CARD ───
-  const aboutCard = document.querySelector('.floating-3d-card');
-
-  if (aboutCard) {
-    const aboutTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: "#about",
-        start: "top center",
-        end: "bottom top",
-        scrub: 1,
-        pin: ".about-left",
-        pinSpacing: true
-      }
-    });
-
-    // Tilt backward, turn slightly, and float upward
-    aboutTl.fromTo(aboutCard, 
-      { rotationX: 20, rotationY: -15, y: 150 },
-      { rotationX: -10, rotationY: 10, y: -50, ease: "none", duration: 1 }
-    );
-  }
-
-  // Hero photo parallax (moves slower on scroll)
-  if (heroPhoto) {
-    gsap.to(heroPhoto, {
-      y: -80,
-      scale: 1.05,
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".hero",
-        start: "top top",
-        end: "bottom top",
-        scrub: 1
-      }
+  // ─── STATEMENT WORD REVEAL ───
+  const statementLabel = document.querySelector('.statement-label');
+  if (statementLabel) {
+    gsap.to(statementLabel, {
+      scrollTrigger: { trigger: '.statement-section', start: 'top 80%' },
+      opacity: 1, x: 0, duration: 0.8, ease: 'power3.out'
     });
   }
+
+  gsap.utils.toArray('.s-reveal').forEach((el, i) => {
+    gsap.to(el, {
+      scrollTrigger: { trigger: '.statement-section', start: 'top 75%' },
+      y: '0%',
+      rotate: 0,
+      duration: 1.2,
+      delay: i * 0.09,
+      ease: 'power4.out'
+    });
+  });
 
   // ─── CLIP-PATH TEXT REVEALS (Portavia-style masked reveals) ───
   // Section titles: slide up from behind mask
@@ -180,7 +172,6 @@ const initAnimations = () => {
   const workCards = gsap.utils.toArray('.work-card');
   workCards.forEach((card, i) => {
     if (i < workCards.length - 1) {
-      // Scale down the current card as the next one scrolls over it
       gsap.to(card, {
         scale: 0.92,
         opacity: 0.5,
@@ -211,7 +202,7 @@ const initAnimations = () => {
     }
   });
 
-  // ─── STATS COUNT-UP ───
+  // ─── PROCESS BLOCKS ENTRANCE ───
   gsap.utils.toArray('.stat-block').forEach((block, i) => {
     gsap.fromTo(block,
       { opacity: 0, y: 50, scale: 0.95 },
@@ -222,8 +213,10 @@ const initAnimations = () => {
     );
   });
 
+  // Count-up only runs when data-count attribute is present (not for process steps)
   gsap.utils.toArray('.stat-number').forEach(num => {
     const target = parseFloat(num.dataset.count);
+    if (isNaN(target)) return;
     const isDecimal = target % 1 !== 0;
     ScrollTrigger.create({
       trigger: num,
@@ -281,7 +274,7 @@ const initAnimations = () => {
     });
   }
 
-  // ─── TESTIMONIALS (Portavia-style staggered left-to-right) ───
+  // ─── RESULT CARD (previously testimonials) ───
   gsap.utils.toArray('.testimonial-card').forEach((card, i) => {
     gsap.fromTo(card,
       { opacity: 0, y: 60, scale: 0.95 },
@@ -320,6 +313,8 @@ const initAnimations = () => {
       opacity: 1, y: 0, duration: 1.2, ease: "power3.out"
     }
   );
+
+  } // end prefers-reduced-motion guard
 };
 
 // ─── Magnetic Buttons ───
@@ -334,6 +329,17 @@ document.querySelectorAll('.btn, .nav-cta, .nav-logo, .wa-float').forEach(btn =>
     gsap.to(btn, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.4)" });
   });
 });
+
+// ─── Hamburger Menu ───
+const hamburger = document.getElementById('navHamburger');
+if (hamburger && navEl) {
+  hamburger.addEventListener('click', () => {
+    navEl.classList.toggle('nav-open');
+  });
+  document.querySelectorAll('.nav-mobile-link').forEach(link => {
+    link.addEventListener('click', () => navEl.classList.remove('nav-open'));
+  });
+}
 
 // ─── FAQ Toggle ───
 document.querySelectorAll('.faq-header').forEach(header => {
