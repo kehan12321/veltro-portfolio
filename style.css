@@ -685,6 +685,20 @@ section { padding: 160px 0; }
 .footer-copy { margin-top: 80px; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
 
 /* ═══════════════════════════════════════════
+   WHATSAPP CTA
+   ═══════════════════════════════════════════ */
+.whatsapp-cta { text-align: center; padding: 2rem 0; }
+.wa-cta-text { color: var(--text-muted); margin-bottom: 1.5rem; font-size: 1.1rem; }
+.btn-whatsapp {
+  background: #25D366; color: #000; border: none;
+  padding: 1rem 2rem; font-size: 1rem; font-weight: 600;
+  border-radius: 50px; display: inline-flex; align-items: center;
+  text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-whatsapp:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,211,102,0.3); }
+.wa-cta-note { margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted); }
+
+/* ═══════════════════════════════════════════
    REDUCED MOTION
    ═══════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
@@ -695,6 +709,12 @@ section { padding: 160px 0; }
   }
   .scroll-line::after { animation: none; }
   .marquee-content { animation: none; }
+}
+
+/* ─── Touch Device Cursor ─── */
+@media (hover: none) {
+  .cursor-dot, .cursor-outline { display: none; }
+  body { cursor: auto; }
 }
 
 /* ═══════════════════════════════════════════
@@ -729,6 +749,78 @@ section { padding: 160px 0; }
   .service-desc { max-height: none; opacity: 1; margin-top: 4px; }
   .service-num { opacity: 1; }
   .service-icon { opacity: 1; }
+}
+
+@media (max-width: 768px) {
+  /* Tap highlight */
+  a, button { -webkit-tap-highlight-color: transparent; }
+
+  /* Nav: full-width pill */
+  .nav {
+    left: 16px;
+    right: 16px;
+    transform: none;
+    width: auto;
+  }
+  /* Hide desktop CTA — use hamburger panel instead */
+  .nav-cta { display: none; }
+
+  /* Full-screen overlay when nav is open */
+  .nav.nav-open {
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 0;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px 16px;
+    background: var(--bg);
+  }
+  .nav.nav-open .nav-mobile-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border-top: none !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  .nav-mobile-link {
+    font-size: 1.5rem;
+    font-family: var(--font-display);
+    padding: 14px 32px;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    letter-spacing: 0.06em;
+    border-radius: 12px;
+  }
+
+  /* Hero */
+  .hero-text-bottom { align-items: center; }
+  .hero-photo-wrapper { max-width: 280px; }
+
+  /* Work cards — fixed height on mobile */
+  .work-img-wrapper { aspect-ratio: unset; height: 220px; }
+  .work-card { border-radius: 24px; margin-bottom: 16px; }
+
+  /* About photo cap */
+  .about-img-wrapper { max-width: 300px; margin: 0 auto; }
+
+  /* Footer — stack vertically */
+  .footer-bottom { flex-direction: column; gap: 24px; padding-top: 32px; }
+  .footer-copy { margin-top: 48px; }
+
+  /* FAQ touch target */
+  .faq-header { min-height: 48px; }
+
+  /* Section header spacing */
+  .section-header { margin-bottom: 48px; }
+
+  /* WhatsApp float */
+  .wa-float { bottom: 20px; right: 16px; }
 }
 
 @media (max-width: 640px) {
