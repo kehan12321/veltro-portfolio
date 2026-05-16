@@ -114,7 +114,7 @@ const initAnimations = () => {
                 scale: 0.85,
                 rotationY: 25,
                 rotationX: 15,
-                y: window.innerHeight * 0.35,
+                y: () => window.innerHeight * 0.35,
                 ease: "power1.inOut"
             }, 0)
             .to(".hero-badge", {
@@ -317,6 +317,21 @@ const initAnimations = () => {
   } // end prefers-reduced-motion guard
 };
 
+// Hide WhatsApp float when footer contact section is visible
+const waFloat = document.querySelector('.wa-float');
+const footerSection = document.querySelector('.footer');
+if (waFloat && footerSection) {
+  const footerObserver = new IntersectionObserver(
+    ([entry]) => {
+      waFloat.style.opacity = entry.isIntersecting ? '0' : '1';
+      waFloat.style.pointerEvents = entry.isIntersecting ? 'none' : 'auto';
+      waFloat.style.transition = 'opacity 0.3s ease';
+    },
+    { threshold: 0.1 }
+  );
+  footerObserver.observe(footerSection);
+}
+
 // ─── Magnetic Buttons ───
 document.querySelectorAll('.btn, .nav-cta, .nav-logo, .wa-float').forEach(btn => {
   btn.addEventListener('mousemove', (e) => {
@@ -334,10 +349,16 @@ document.querySelectorAll('.btn, .nav-cta, .nav-logo, .wa-float').forEach(btn =>
 const hamburger = document.getElementById('navHamburger');
 if (hamburger && navEl) {
   hamburger.addEventListener('click', () => {
-    navEl.classList.toggle('nav-open');
+    const isOpen = navEl.classList.toggle('nav-open');
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    hamburger.setAttribute('aria-expanded', String(isOpen));
   });
   document.querySelectorAll('.nav-mobile-link').forEach(link => {
-    link.addEventListener('click', () => navEl.classList.remove('nav-open'));
+    link.addEventListener('click', () => {
+      navEl.classList.remove('nav-open');
+      document.body.style.overflow = '';
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
   });
 }
 
@@ -346,8 +367,13 @@ document.querySelectorAll('.faq-header').forEach(header => {
   header.addEventListener('click', function () {
     const faqItem = this.parentElement;
     faqItem.classList.toggle('active');
+    const btn = faqItem.querySelector('.faq-header');
+    btn.setAttribute('aria-expanded', faqItem.classList.contains('active') ? 'true' : 'false');
     document.querySelectorAll('.faq-item.active').forEach(item => {
-      if (item !== faqItem) item.classList.remove('active');
+      if (item !== faqItem) {
+        item.classList.remove('active');
+        item.querySelector('.faq-header').setAttribute('aria-expanded', 'false');
+      }
     });
   });
 });
