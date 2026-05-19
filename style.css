@@ -361,7 +361,8 @@ section { padding: 160px 0; }
 
 @media (max-width: 640px) {
   .statement-section { padding: 80px 0; }
-  .s-line.s-indent { padding-left: 32px; }
+  .s-reveal { font-size: clamp(2rem, 7.5vw, 3rem); }
+  .s-line.s-indent { padding-left: 20px; }
 }
 
 /* ═══════════════════════════════════════════
@@ -513,6 +514,15 @@ section { padding: 160px 0; }
   font-weight: 600;
   letter-spacing: 0.02em;
   color: var(--text);
+}
+.work-meta {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  justify-content: center; align-items: center;
+  margin-top: 8px;
+}
+.work-cat, .work-result {
+  font-size: 0.82rem; color: var(--text-muted);
+  letter-spacing: 0.05em;
 }
 /* ═══════════════════════════════════════════
    SERVICES (Numbered Accordion)
@@ -827,6 +837,7 @@ section { padding: 160px 0; }
   .hero { padding-top: 100px; }
   .hero-heading { font-size: clamp(3rem, 16vw, 5rem); }
   .hero-name { font-size: 0.7rem; }
+  .hero-photo-wrapper { width: min(260px, 68vw); }
 
   .stats-grid { grid-template-columns: 1fr 1fr; }
   .stat-block { padding: 40px 20px; border-right: none; border-bottom: 1px solid var(--border); }
@@ -839,6 +850,7 @@ section { padding: 160px 0; }
   .work-meta { flex-direction: column; gap: 4px; }
 
   .service-item { flex-direction: column; gap: 16px; }
+  .service-icon { display: none; }
 
   .cta-box { padding: 48px 24px; }
 

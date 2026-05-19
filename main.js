@@ -94,35 +94,38 @@ const initAnimations = () => {
 
   // ─── HERO LATERAL TEXT SPLIT ON SCROLL (Portavia signature) ───
   // "PREMIUM WEB" slides LEFT, "DESIGNER" slides RIGHT as user scrolls
+  // Desktop only — disabled on mobile (stacked layout)
   const heroTextTop = document.querySelector('.hero-text-top');
   const heroTextBottom = document.querySelector('.hero-text-bottom');
   const heroPhoto = document.querySelector('.hero-photo-wrapper');
 
-  if (heroTextTop && heroTextBottom && heroPhoto) {
-    const scrollTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: ".hero",
-        start: "top top",
-        end: "bottom top",
-        scrub: 0.8
-      }
-    });
+  gsap.matchMedia().add("(min-width: 1025px)", () => {
+    if (heroTextTop && heroTextBottom && heroPhoto) {
+      const scrollTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".hero",
+          start: "top top",
+          end: "bottom top",
+          scrub: 0.8
+        }
+      });
 
-    scrollTl.to(heroTextTop, { xPercent: -80, opacity: 0, ease: "power1.inOut" }, 0)
-            .to(".hero-heading-right", { xPercent: 80, opacity: 0, ease: "power1.inOut" }, 0)
-            .to(heroPhoto, {
-                scale: 0.85,
-                rotationY: 25,
-                rotationX: 15,
-                y: () => window.innerHeight * 0.35,
-                ease: "power1.inOut"
-            }, 0)
-            .to(".hero-badge", {
-                scale: 0,
-                opacity: 0,
-                ease: "power1.inOut"
-            }, 0);
-  }
+      scrollTl.to(heroTextTop, { xPercent: -80, opacity: 0, ease: "power1.inOut" }, 0)
+        .to(".hero-heading-right", { xPercent: 80, opacity: 0, ease: "power1.inOut" }, 0)
+        .to(heroPhoto, {
+          scale: 0.85,
+          rotationY: 25,
+          rotationX: 15,
+          y: () => window.innerHeight * 0.35,
+          ease: "power1.inOut"
+        }, 0)
+        .to(".hero-badge", {
+          scale: 0,
+          opacity: 0,
+          ease: "power1.inOut"
+        }, 0);
+    }
+  });
 
   // ─── STATEMENT WORD REVEAL ───
   const statementLabel = document.querySelector('.statement-label');
